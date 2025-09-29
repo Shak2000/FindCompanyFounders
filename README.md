@@ -63,8 +63,8 @@ Example `founders.json` structure:
 ```json
 {
   "Approval AI": ["Arjun Lalwani", "Helly Shah"],
-  "Meteor": ["John Doe", "Jane Smith"],
-  "Read AI": ["Founder One", "Founder Two"]
+  "Meteor": ["Farhan Khan", "Pranav Madhukar"],
+  "Read AI": ["David Shim", "Robert Williams", "Elliott Waldron"]
 }
 ```
 
@@ -109,3 +109,11 @@ The application includes comprehensive error handling for:
 - Verify Ollama is running and the Gemma3 4B model is available
 - Check that your `companies.txt` file follows the correct format
 - Review console output for specific error messages during processing
+
+## Future Improvements
+
+- Support generic input text formats by using Ollama's Gemma3 4B model to extract company names and corresponding URLs.
+- Run multiple searches for the same company and keep founder names that appear multiple times.
+- Use reference websites like CrunchBase and/or LinkedIn to verify founder names.
+- Use another API like Google's Custom Search JSON API to verify founder names.
+- Examine organic results beyond the first 10 in case the founder name is missing from those first 10.
