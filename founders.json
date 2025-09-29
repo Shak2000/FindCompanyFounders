@@ -1,1 +1,51 @@
-{"Approval AI": ["Arjun Lalwani", "Helly Shah"]}
+{
+  "Approval AI": [
+    "Arjun Lalwani",
+    "Helly Shah"
+  ],
+  "Meteor": [
+    "Farhan Khan",
+    "Pranav Madhukar",
+    "Geoff Schmidt",
+    "Matt DeBergalis",
+    "Chris St. Peter",
+    "Nick Martin",
+    "Doug Zell"
+  ],
+  "Read AI": [
+    "David Shim",
+    "Robert Williams",
+    "Elliott Waldron"
+  ],
+  "Profound": [
+    "Dylan Babbs",
+    "James Cadwallader"
+  ],
+  "Wayfinder Bio": [
+    "Jason Fontana",
+    "David Sparkman-Yager",
+    "Chuhern Hwang"
+  ],
+  "Modulus Therapeutics": [
+    "Max Darnell",
+    "Bryce Daines"
+  ],
+  "Persephone Bio": [
+    "Stephanie Culler",
+    "Steve Van Dien"
+  ],
+  "Casium": [
+    "Patrick Cozzi",
+    "David Gates",
+    "Jeff Crowe",
+    "Shey Sabripour"
+  ],
+  "Kernel": [
+    "Bryan Johnson"
+  ],
+  "Rosie": [
+    "Michael Ryzewic",
+    "Jon Ambrose",
+    "Nick Nickitas"
+  ]
+}
