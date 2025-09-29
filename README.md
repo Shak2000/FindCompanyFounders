@@ -1,12 +1,12 @@
 # FindFounders
 
-A Python application that automatically searches for and extracts the names of founders for each company listed in a given text file using SerpApi's Google Search Engine Results API and Ollama's AI models.
+A Python application that automatically searches for and extracts the names of founders for each company listed in a given text file using [SerpApi's Google Search Engine Results API](https://serpapi.com/search-api) and Ollama's AI models.
 
 ## Features
 
 - Reads company names and URLs from a text file
 - Searches Google for founder information using SerpApi
-- Extracts founder names using Ollama's Gemma3 4B model
+- Extracts founder names from the search results using Ollama's Gemma3 4B model
 - Outputs results to a structured JSON file
 - Handles multiple companies in batch processing
 
