@@ -1,4 +1,5 @@
 import json
+import os
 import ollama
 import requests
 from typing import List, Optional
@@ -73,11 +74,17 @@ def search_companies(file_name: str):
     """
     Search for the founders of the companies in the text file.
     Opens the text file, extracts each line (company + URL), uses Google Search Engine Results API
-    to search for "{LINE} founders", saves results to info.json, calls find_founders,
+    to search for "{LINE} founders", saves results to info/info-[COMPANY-NAME].json, calls find_founders,
     and assembles all results into founders.json.
     """
     # Initialize an empty dictionary to store the results
     all_founders = {}
+    
+    # Create info directory if it doesn't exist
+    info_dir = "info"
+    if not os.path.exists(info_dir):
+        os.makedirs(info_dir)
+        print(f"Created directory: {info_dir}")
     
     try:
         # Read the companies file
@@ -118,12 +125,18 @@ def search_companies(file_name: str):
                 response.raise_for_status()
                 search_results = response.json()
                 
-                # Save search results to info.json
-                with open('info.json', 'w', encoding='utf-8') as f:
+                # Create a safe filename for the company
+                safe_company_name = "".join(c for c in company_part if c.isalnum() or c in (' ', '-', '_')).rstrip()
+                safe_company_name = safe_company_name.replace(' ', '-')
+                info_file_path = os.path.join(info_dir, f"info-{safe_company_name}.json")
+                
+                # Save search results to info/info-[COMPANY-NAME].json
+                with open(info_file_path, 'w', encoding='utf-8') as f:
                     json.dump(search_results, f, indent=2)
+                print(f"Saved search results to: {info_file_path}")
                 
                 # Call find_founders to extract founder names
-                founders = find_founders(company_part, url_part, 'info.json')
+                founders = find_founders(company_part, url_part, info_file_path)
                 
                 # Store results
                 if founders:

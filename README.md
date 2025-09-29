@@ -14,7 +14,7 @@ A Python application that automatically searches for and extracts the names of f
 
 - Python 3.7+
 - Ollama installed and running locally
-- SerpApi account and API key
+- SerpApi account and API key, with a free tier of 250 searches each month
 - Gemma3 4B model available in Ollama
 
 ## Installation
@@ -54,9 +54,9 @@ A Python application that automatically searches for and extracts the names of f
 
 ## Output
 
-The application generates two main output files:
+The application generates the following output files:
 
-- `info.json` - Contains the latest search results from SerpApi (overwritten for each company)
+- `info/info-[COMPANY-NAME].json` - Contains search results from SerpApi for each company (one file per company)
 - `founders.json` - Contains the final structured results with all company founders
 
 Example `founders.json` structure:
@@ -75,7 +75,7 @@ Example `founders.json` structure:
 - `companies.txt` - Input file with company names and URLs
 - `requirements.txt` - Python dependencies
 - `founders.json` - Output file with founder information
-- `info.json` - Temporary file with search results
+- `info/` - Directory containing search results for each company
 
 ## Functions
 
@@ -88,6 +88,10 @@ Uses Ollama's AI model to extract founder names from search result snippets.
 ### `search_companies(file_name: str)`
 Main function that orchestrates the entire process for all companies in the input file.
 
+## Results
+
+In the current results for the current implementation, 8 companies had their founders correctly identified without any errors, 1 company (Profound) had its founders correctly identified in addition to an incorrect name, and 1 company had one out of two of its founders identified.
+
 ## Error Handling
 
 The application includes comprehensive error handling for:
@@ -99,9 +103,10 @@ The application includes comprehensive error handling for:
 ## Notes
 
 - The application processes companies sequentially to avoid overwhelming the APIs
-- Search results are temporarily stored in `info.json` and overwritten for each company
+- Search results are stored in separate files within the `info/` directory, one per company
 - Only first and last names are extracted, excluding titles and suffixes
 - The application will skip malformed lines in the companies file and continue processing
+- Company names in filenames are sanitized to remove special characters for filesystem compatibility
 
 ## Troubleshooting
 
