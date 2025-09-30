@@ -51,6 +51,7 @@ A Python application that automatically searches for and extracts the names of f
    - Search for founder information using Google via SerpApi
    - Extract founder names using AI
    - Save all results to `founders.json`
+   - Display an accuracy analysis table comparing results to `correct_founders.json`
 
 ## Output
 
@@ -75,7 +76,7 @@ Example `founders.json` structure:
 - `companies.txt` - Input file with company names and URLs
 - `requirements.txt` - Python dependencies
 - `founders.json` - Output file with founder information
-- `correct_founders.json` - Answer key file containing the correct list of names of the founders of each company
+- `correct_founders.json` - Answer key with the correct list of names of the founders of each company
 - `info/` - Directory containing search results for each company
 
 ## Functions
@@ -88,6 +89,18 @@ Uses Ollama's AI model to extract founder names from search result snippets.
 
 ### `search_companies(file_name: str)`
 Main function that orchestrates the entire process for all companies in the input file.
+
+### `load_correct_founders(file_path: str)`
+Loads the correct founders from the answer key file for accuracy comparison.
+
+### `analyze_accuracy(found_founders: dict, correct_founders: dict)`
+Compares found founders against correct founders and calculates accuracy metrics.
+
+### `print_accuracy_table(analysis_results: dict)`
+Prints a formatted table showing accuracy metrics for each company with three dimensions:
+- **All Correct**: Whether all correct founders were identified
+- **≥1 Correct**: Whether at least one correct founder was identified  
+- **No Incorrect**: Whether no incorrect founders were listed
 
 ## Results
 
