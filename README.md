@@ -75,6 +75,7 @@ Example `founders.json` structure:
 - `companies.txt` - Input file with company names and URLs
 - `requirements.txt` - Python dependencies
 - `founders.json` - Output file with founder information
+- `correct_founders.json` - Answer key file containing the correct list of names of the founders of each company
 - `info/` - Directory containing search results for each company
 
 ## Functions
