@@ -70,6 +70,118 @@ def find_founders(company: str, url: str, file_name: str) -> List[str]:
     return founders
 
 
+def load_correct_founders(file_path: str = "correct_founders.json") -> dict:
+    """
+    Load the correct founders from the answer key file.
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Warning: Correct founders file '{file_path}' not found. Skipping accuracy analysis.")
+        return {}
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON in '{file_path}'. Skipping accuracy analysis.")
+        return {}
+
+
+def analyze_accuracy(found_founders: dict, correct_founders: dict) -> dict:
+    """
+    Analyze the accuracy of found founders compared to correct founders.
+    Returns a dictionary with analysis results for each company.
+    """
+    results = {}
+    
+    for company in correct_founders:
+        if company not in found_founders:
+            results[company] = {
+                'all_correct': False,
+                'at_least_one_correct': False,
+                'no_incorrect': True,
+                'found_founders': [],
+                'correct_founders': correct_founders[company]
+            }
+            continue
+            
+        found = set(found_founders[company])
+        correct = set(correct_founders[company])
+        
+        # Check if all correct founders are listed
+        all_correct = correct.issubset(found)
+        
+        # Check if at least one correct founder is listed
+        at_least_one_correct = len(correct.intersection(found)) > 0
+        
+        # Check if no incorrect founders are listed (all found founders are correct)
+        no_incorrect = found.issubset(correct)
+        
+        results[company] = {
+            'all_correct': all_correct,
+            'at_least_one_correct': at_least_one_correct,
+            'no_incorrect': no_incorrect,
+            'found_founders': found_founders[company],
+            'correct_founders': correct_founders[company]
+        }
+    
+    return results
+
+
+def print_accuracy_table(analysis_results: dict):
+    """
+    Print a formatted table showing accuracy metrics for each company.
+    """
+    if not analysis_results:
+        print("No accuracy analysis available.")
+        return
+    
+    # Calculate column widths
+    company_width = max(len("Company"), max(len(company) for company in analysis_results.keys()))
+    
+    # Table headers
+    headers = ["Company", "All Correct", "≥1 Correct", "No Incorrect"]
+    col_widths = [company_width, 12, 11, 13]
+    
+    # Print table header
+    print("\n" + "=" * (sum(col_widths) + len(col_widths) + 1))
+    print("FOUNDER IDENTIFICATION ACCURACY")
+    print("=" * (sum(col_widths) + len(col_widths) + 1))
+    
+    # Print column headers
+    header_row = "|"
+    for i, header in enumerate(headers):
+        header_row += f" {header:<{col_widths[i]}} |"
+    print(header_row)
+    
+    # Print separator
+    separator = "|"
+    for width in col_widths:
+        separator += "—" * (width + 2) + "|"
+    print(separator)
+    
+    # Print data rows
+    for company, metrics in analysis_results.items():
+        row = f"| {company:<{col_widths[0]}} |"
+        row += f" {'Yes' if metrics['all_correct'] else 'No':<{col_widths[1]}} |"
+        row += f" {'Yes' if metrics['at_least_one_correct'] else 'No':<{col_widths[2]}} |"
+        row += f" {'Yes' if metrics['no_incorrect'] else 'No':<{col_widths[3]}} |"
+        print(row)
+    
+    # Print bottom border
+    print("=" * (sum(col_widths) + len(col_widths) + 1))
+    
+    # Print summary statistics
+    total_companies = len(analysis_results)
+    all_correct_count = sum(1 for metrics in analysis_results.values() if metrics['all_correct'])
+    at_least_one_count = sum(1 for metrics in analysis_results.values() if metrics['at_least_one_correct'])
+    no_incorrect_count = sum(1 for metrics in analysis_results.values() if metrics['no_incorrect'])
+    
+    print(f"\nSUMMARY:")
+    print(f"Total companies: {total_companies}")
+    print(f"All correct founders identified: {all_correct_count}/{total_companies} ({all_correct_count/total_companies*100:.1f}%)")
+    print(f"At least one correct founder: {at_least_one_count}/{total_companies} ({at_least_one_count/total_companies*100:.1f}%)")
+    print(f"No incorrect founders listed: {no_incorrect_count}/{total_companies} ({no_incorrect_count/total_companies*100:.1f}%)")
+
+
 def search_companies(file_name: str):
     """
     Search for the founders of the companies in the text file.
@@ -171,6 +283,12 @@ def search_companies(file_name: str):
     except Exception as e:
         # Unexpected error
         print(f"Error saving founders.json: {e}")
+    
+    # Load correct founders and perform accuracy analysis
+    correct_founders = load_correct_founders()
+    if correct_founders:
+        analysis_results = analyze_accuracy(all_founders, correct_founders)
+        print_accuracy_table(analysis_results)
 
 
 if __name__ == "__main__":
